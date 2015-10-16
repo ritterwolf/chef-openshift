@@ -52,5 +52,4 @@ describe 'openshift::install' do
   it 'started openshift' do
     expect(service('openshift')).to be_running
   end
-
 end

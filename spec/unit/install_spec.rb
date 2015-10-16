@@ -23,6 +23,11 @@ describe 'Common openshift::install' do
   let(:archive_remote_file) { chef_run.remote_file("#{Chef::Config[:file_cache_path]}/#{archive_file}") }
   let(:archive_extraction) { chef_run.execute('extract_openshift') }
 
+  before do
+    allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).and_call_original
+    allow_any_instance_of(Chef::Recipe).to receive(:include_recipe).with('docker')
+  end
+
   it 'downloads the binaries' do
     expect(chef_run).to create_remote_file("#{Chef::Config[:file_cache_path]}/#{archive_file}")
   end

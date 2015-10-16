@@ -28,20 +28,22 @@ end
 # TODO: Add more platforms by adding the correct tests.
 # TODO: Move init-system specific things into their own recipes
 
-if node.platform_family == 'rhel' and node.platform_version.split('.')[0] == '7'
-  template '/etc/systemd/system/openshift.service' do
-    cookbook 'openshift'
-    action :create
+template '/etc/systemd/system/openshift.service' do
+  cookbook 'openshift'
+  action :create
+  only_if do
+    node.platform_family == 'rhel' && node.platform_version.split('.')[0] == '7'
   end
 end
 
-if node.platform == 'ubuntu' and node.platform_version == '14.04'
-  template '/etc/init/openshift.conf' do
-    cookbook 'openshift'
-    action :create
+template '/etc/init/openshift.conf' do
+  cookbook 'openshift'
+  action :create
+  only_if do
+    node.platform == 'ubuntu' && node.platform_version == '14.04'
   end
 end
 
 service 'openshift' do
-  action [ :enable, :start ]
+  action [:enable, :start]
 end
