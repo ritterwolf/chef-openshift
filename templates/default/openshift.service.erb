@@ -1,0 +1,8 @@
+[Unit]
+Description=Openshift
+
+[Service]
+ExecStart=/usr/local/bin/openshift start
+
+[Install]
+WantedBy=multi-user.target
