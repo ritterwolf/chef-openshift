@@ -12,15 +12,13 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-include_recipe 'docker'
-
 execute 'extract_openshift' do
   command "tar xa -f #{Chef::Config[:file_cache_path]}/openshift-origin.tar.gz --no-overwrite-dir -C /usr/local/bin" # rubocop:disable Metrics/LineLength
   action :nothing
 end
 
 remote_file "#{Chef::Config[:file_cache_path]}/openshift-origin.tar.gz" do
-  source node.openshift[node.openshift.version]['url']
+  source node['openshift'][node['openshift']['version']]['url']
   action :create
   notifies :run, 'execute[extract_openshift]', :immediately
 end
@@ -32,7 +30,7 @@ template '/etc/systemd/system/openshift.service' do
   cookbook 'openshift'
   action :create
   only_if do
-    node.platform_family == 'rhel' && node.platform_version.split('.')[0] == '7'
+    node['platform_family'] == 'rhel' && node['platform_version'].split('.')[0] == '7' # rubocop:disable Metrics/LineLength
   end
 end
 
@@ -40,7 +38,7 @@ template '/etc/init/openshift.conf' do
   cookbook 'openshift'
   action :create
   only_if do
-    node.platform == 'ubuntu' && node.platform_version == '14.04'
+    node['platform'] == 'ubuntu' && node['platform_version'] == '14.04'
   end
 end
 

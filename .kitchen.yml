@@ -8,9 +8,11 @@ provisioner:
 platforms:
   - name: centos-7.1
   - name: ubuntu-14.04
+    run_list: apt
 
 suites:
   - name: install
     run_list:
-    - openshift::install
+      - openshift-test::default
+      - openshift::install
     attributes:
